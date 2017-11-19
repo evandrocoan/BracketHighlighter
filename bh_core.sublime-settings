@@ -2,25 +2,6 @@
     // Debug logging
     "debug_enable": false,
 
-    // Scope? (Defined in theme files.)
-    // Examples: (keyword|string|number)
-    "default_scope" : "brackethighlighter.default",
-    "quote_scope"   : "brackethighlighter.quote",
-    "curly_scope"   : "brackethighlighter.curly",
-    "round_scope"   : "brackethighlighter.round",
-    "square_scope"  : "brackethighlighter.square",
-    "angle_scope"   : "brackethighlighter.angle",
-    "tag_scope"     : "brackethighlighter.tag",
-
-    // Outline? (solid|outline|underline|none)
-    // https://github.com/facelessuser/BracketHighlighter/issues/21
-    "quote_style" : "underline",
-    "curly_style" : "underline",
-    "round_style" : "underline",
-    "square_style": "underline",
-    "angle_style" : "underline",
-    "tag_style"   : "underline",
-
     // Try to ensure dependencies are up to date.
     // If it is not desirable to have this done (like developing) on a specific dependency,
     // or some other reason, set this to False.
@@ -52,6 +33,10 @@
     // the other bracket.
     "show_offscreen_bracket_popup": true,
 
+    // If enabled with `show_offscreen_bracket_popup`,the popup will be shown
+    // even if brackets are onscreen.
+    "show_bracket_popup_always": false,
+
     // Adjust char per line context of bracket popup.
     "popup_char_context": 120,
 
@@ -60,7 +45,6 @@
     // Specified line count is split to context before and after the target line.
     // So a value of 4 would give you two lines of context before and two lines after.
     "popup_line_context": 6,
-
 
     // Experimental: Use 'popup_bracket_emphasis' to customize the popup's bracket emphasis color
     "use_custom_popup_bracket_emphasis": false,
@@ -398,7 +382,8 @@
                 "source.ruby.rails.embedded.html",
                 "source.ruby.embedded.html",
                 "storage.type.function.arrow.js",
-                "punctuation.accessor.php"
+                "punctuation.accessor.php",
+                "punctuation.accessor.arrow.php"
             ],
             "language_filter": "whitelist",
             "language_list": [
@@ -438,7 +423,7 @@
         // !!! May conflict with 'php_keywords' if enabled in same file !!!
         {
             "name": "ruby_embedded_html",
-            "open": "((?:(?<=<%)|(?<=^)|(?<==)|(?<=<<))\\s*\\b(?:if|begin|case)\\b(?!:)|(?:(?<=<%)|(?<=^))\\s*(?:(?:private|public|protected)\\s*)?def\\b[\\p{Ll}\\p{Lu}]*\\b(?!:)|(?:(?<=<%)|(?<=^))\\s*\\b(?:for|until|unless|while|class|module)\\b(?!:)|(?<!:)\\bdo\\b(?!:))",
+            "open": "((?:(?<=<%)|(?<=^)|(?<==)|(?<=<<)|(?<=return))\\s*\\b(?:if|begin|case)\\b(?!:)|(?:(?<=<%)|(?<=^))\\s*(?:(?:private|public|protected)\\s*)?def\\b[\\p{Ll}\\p{Lu}]*\\b(?!:)|(?:(?<=<%)|(?<=^))\\s*\\b(?:for|until|unless|while|class|module)\\b(?!:)|(?<!:)\\bdo\\b(?!:))",
             "close": "(?<=[\\s;])(end)\\b(?!:)",
             "style": "default",
             "scope_exclude": ["text.html", "source", "comment", "string"],
@@ -454,7 +439,7 @@
         // Ruby conditional statements
         {
             "name": "ruby",
-            "open": "((?:(?<=^)|(?<==)|(?<=<<))\\s*\\b(?:if|begin|case)\\b(?!:)|^\\s*(?:(?:private|public|protected)\\s*)?def\\b[\\p{Ll}\\p{Lu}]*\\b(?!:)|^\\s*\\b(?:for|until|unless|while|class|module)\\b(?!:)|(?<!:)\\bdo\\b(?!:))",
+            "open": "((?:(?<=^)|(?<==)|(?<=<<)|(?<=return))\\s*\\b(?:if|begin|case)\\b(?!:)|^\\s*(?:(?:private|public|protected)\\s*)?def\\b[\\p{Ll}\\p{Lu}]*\\b(?!:)|^\\s*\\b(?:for|until|unless|while|class|module)\\b(?!:)|(?<!:)\\bdo\\b(?!:))",
             "close": "(?<=[\\s;])(end)\\b(?!:)",
             "style": "default",
             "scope_exclude": ["string", "comment"],
@@ -627,6 +612,25 @@
     "user_scope_brackets": [],
     "user_brackets": [],
 
+    // Scope? (Defined in theme files.)
+    // Examples: (keyword|string|number)
+    // "default_scope" : "brackethighlighter.default",
+    // "quote_scope"   : "brackethighlighter.quote",
+    // "curly_scope"   : "brackethighlighter.curly",
+    // "round_scope"   : "brackethighlighter.round",
+    // "square_scope"  : "brackethighlighter.square",
+    // "angle_scope"   : "brackethighlighter.angle",
+    // "tag_scope"     : "brackethighlighter.tag",
+
+    // Outline? (solid|outline|underline|none)
+    // https://github.com/facelessuser/BracketHighlighter/issues/21
+    // "quote_style" : "underline",
+    // "curly_style" : "underline",
+    // "round_style" : "underline",
+    // "square_style": "underline",
+    // "angle_style" : "underline",
+    // "tag_style"   : "underline",
+
     // Define region highlight styles
     "bracket_styles": {
         // "default" and "unmatched" styles are special
@@ -648,7 +652,14 @@
             // BH1's original default color for reference
             // "color": "entity.name.class",
             "icon": "dot",
-            "color": "brackethighlighter.default",
+
+            // Support the old convention of "brackethighlighter.default"
+            // for themes that already provide something.
+            // As this has always been the only one we've provided
+            // by default, all the others will use region-ish colors.
+            "color": "region.yellowish brackethighlighter.default",
+
+            // https://github.com/facelessuser/BracketHighlighter/issues/21
             "style": "thin_underline"
         },
 
@@ -657,54 +668,54 @@
         // style.
         "unmatched": {
             "icon": "question",
-            "color": "brackethighlighter.unmatched",
-            "style": "thin_underline"
+            "color": "region.redish",
+            "style": "thin_underline",
         },
         // User defined region styles
         "curly": {
             "icon": "curly_bracket",
-            // "color": "brackethighlighter.curly",
-            // "style": "thin_underline"
+            "color": "region.purplish",
+            "style": "thin_underline",
         },
         "round": {
             "icon": "round_bracket",
-            // "color": "brackethighlighter.round",
-            // "style": "thin_underline"
+            "color": "region.yellowish",
+            "style": "thin_underline",
         },
         "square": {
             "icon": "square_bracket",
-            // "color": "brackethighlighter.square",
-            // "style": "thin_underline"
+            "color": "region.bluish",
+            "style": "thin_underline",
         },
         "angle": {
             "icon": "angle_bracket",
-            // "color": "brackethighlighter.angle",
-            // "style": "thin_underline"
+            "color": "region.orangish",
+            "style": "thin_underline",
         },
         "tag": {
             "icon": "tag",
-            // "color": "brackethighlighter.tag",
-            // "style": "thin_underline"
+            "color": "region.orangish",
+            "style": "thin_underline",
         },
         "c_define": {
             "icon": "hash",
-            // "color": "brackethighlighter.c_define",
-            // "style": "thin_underline"
+            "color": "region.yellowish",
+            "style": "thin_underline",
         },
         "single_quote": {
             "icon": "single_quote",
-            // "color": "brackethighlighter.quote",
-            // "style": "thin_underline"
+            "color": "region.greenish",
+            "style": "thin_underline",
         },
         "double_quote": {
             "icon": "double_quote",
-            // "color": "brackethighlighter.quote",
-            // "style": "thin_underline"
+            "color": "region.greenish",
+            "style": "thin_underline",
         },
         "regex": {
-            "icon": "regex",
-            // "color": "brackethighlighter.quote",
-            // "style": "thin_underline"
-        }
-    }
+            "icon": "star",
+            "color": "region.greenish",
+            "style": "thin_underline",
+        },
+    },
 }
