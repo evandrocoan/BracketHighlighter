@@ -32,7 +32,7 @@ class Payload(object):
 
 
 class BracketRegion (namedtuple('BracketRegion', ['begin', 'end'], verbose=False)):
-    """Bracket Regions for plugins."""
+    """Bracket regions for plugins."""
 
     def move(self, begin, end):
         """Move bracket region to different points."""
@@ -51,7 +51,7 @@ class BracketRegion (namedtuple('BracketRegion', ['begin', 'end'], verbose=False
 
 
 def is_bracket_region(obj):
-    """Check if object is a BracketRegion."""
+    """Check if object is a `BracketRegion`."""
 
     return isinstance(obj, BracketRegion)
 
@@ -175,7 +175,7 @@ class BracketPlugin(object):
         self.args["name"] = name
         Payload.args = self.args
 
-        # Call a TextCommand to run the plugin so it can feed in the Edit object
+        # Call a `TextCommand` to run the plugin so it can feed in the `Edit` object
         view.run_command("bracket_plugin_run")
 
         if Payload.status:

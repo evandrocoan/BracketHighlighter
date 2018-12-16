@@ -1,3 +1,31 @@
+# BracketHighlighter 2.27.5
+
+- **FIX**: Fix issue where bracket context code blocks in popups sometimes are recognized as Jinja2 template variables.
+- **FIX**: Fix internal clone view cleanup.
+- **FIX**: Fix bad clone reference.
+- **FIX**: `on_hover` should not occur if `bracket_highlighter.ignore` is set in the view.
+
+# BracketHighlighter 2.27.4
+
+Jun 14, 2018
+
+- **FIX**: Avoid targeting common `HERDOC` syntax with angle brackets. #482
+
+# BracketHighlighter 2.27.3
+
+Apr 21, 2018
+
+- **FIX**: Selecting "no threshold" search from popup quickly reverts back to unmatched.
+- **FIX**: Backtick string support extended to JavaScript.
+
+# BracketHighlighter 2.27.2
+
+Mar 20, 2018
+
+- **FIX**: `C#` interpolated strings !468.
+- **FIX**: Fix C/C++ preprocessor highlighting !474.
+- **FIX**: Only highlight the keyword in C/C++ preprocessors af22600cd23bd3c15a1a0f6fc54041e6d96b3dd3.
+
 # BracketHighlighter 2.27.1
 
 Feb 4, 2018

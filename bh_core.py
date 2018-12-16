@@ -73,7 +73,7 @@ class BhCore(object):
         if plugin is None:
             plugin = {}
 
-        # Init view params
+        # Initialize view parameters
         self.refresh_match = False
         self.last_id_view = None
         self.last_id_sel = None
@@ -88,7 +88,7 @@ class BhCore(object):
             no_block_mode = self.settings.get('ignore_block_mode_in_plugin', True)
         block_cursor = self.settings.get('block_cursor_mode', False) and not no_block_mode
 
-        # Init search object
+        # Initialize search object
         self.rules = bh_rules.SearchRules(
             self.settings.get("brackets", []) + self.settings.get("user_brackets", []),
             self.settings.get("scope_brackets", []) + self.settings.get("user_scope_brackets", []),
@@ -97,12 +97,12 @@ class BhCore(object):
             block_cursor
         )
 
-        # Init selection params
+        # Initialize selection parameters
         self.use_selection_threshold = True
         self.selection_threshold = int(self.settings.get("search_threshold", 5000))
         self.loaded_modules = set([])
 
-        # Init plugin
+        # Initialize plugin
         alter_select = False
         self.plugin = None
         self.plugin_targets = set([])
@@ -113,7 +113,7 @@ class BhCore(object):
                 for target in plugin["type"]:
                     self.plugin_targets.add(target)
 
-        # Region selection, highlight, managment
+        # Region selection, highlight, management
         self.regions = bh_regions.BhRegion(alter_select, count_lines)
 
     def refresh_rules(self, language):
@@ -256,7 +256,7 @@ class BhCore(object):
         return match
 
     def compare(self, first, second, scope_bracket=False):
-        """Compare brackets.  This function allows bracket plugins to add aditional logic."""
+        """Compare brackets.  This function allows bracket plugins to add additional logic."""
 
         if scope_bracket:
             match = first is not None and second is not None
@@ -285,9 +285,9 @@ class BhCore(object):
 
     def post_match(self, left, right, center, scope_bracket=False):
         """
-        Peform special logic after a match has been made.
+        Perform special logic after a match has been made.
 
-        This function allows bracket plugins to add aditional logic.
+        This function allows bracket plugins to add additional logic.
         """
 
         if left is not None:
@@ -420,7 +420,7 @@ class BhCore(object):
                     self.regions.store_sel([sel])
                     continue
 
-                # Subsearch guard for recursive matching of scopes
+                # Sub-search guard for recursive matching of scopes
                 self.recursive_guard = False
 
                 # Prepare for search
@@ -452,7 +452,7 @@ class BhCore(object):
         view.settings().set("bracket_highlighter.busy", False)
 
     def sub_search(self, sel, scope=None):
-        """Search a scope bracket match for bracekts within."""
+        """Search a scope bracket match for brackets within."""
 
         # Protect against recursive search of scopes
         self.recursive_guard = True
@@ -521,7 +521,7 @@ class BhCore(object):
         Perform match for scope brackets.
 
         See if scope should be searched, and then check
-        endcaps to determine if valid scope bracket.
+        end caps to determine if valid scope bracket.
         """
 
         center = sel.b
@@ -548,7 +548,6 @@ class BhCore(object):
                     center, before_center, scope, adj_dir
                 )
             except Exception:
-                # log(str(traceback.format_exc()))
                 scope_count += 1
                 continue
 
@@ -777,7 +776,7 @@ class BhOffscreenPopupCommand(sublime_plugin.TextCommand):
 
         # Search with no threshold
         if no_threshold:
-            self.view.run_command("bh_key", {"lines": True})
+            self.view.run_command("bh_async_key", {"lines": True})
 
         # Get point if not specified
         if point is None:
@@ -788,7 +787,7 @@ class BhOffscreenPopupCommand(sublime_plugin.TextCommand):
         # Get relative bracket regions for point
         if point is not None:
             clone_view = self.view.id() == self.view.settings().get('bracket_highlighter.clone', -1)
-            locations_key = 'bracket_highlighter.clone' if clone_view else 'bracket_highlighter.clone_locations'
+            locations_key = 'bracket_highlighter.clone_locations' if clone_view else 'bracket_highlighter.locations'
             locations = self.view.settings().get(locations_key, {})
             for k, v in locations.get('unmatched', {}).items():
                 if v[0] <= point <= v[1]:
@@ -865,7 +864,7 @@ class BhKeyCommand(sublime_plugin.TextCommand):
     """
     Command to process shortcuts, menu calls, and command palette calls.
 
-    This is how BhCore is called with different options.
+    This is how `BhCore` is called with different options.
     """
 
     def run(
@@ -980,7 +979,11 @@ class BhListenerCommand(sublime_plugin.EventListener):
         """Show popup indicating where other offscreen bracket is located."""
 
         settings = sublime.load_settings('bh_core.sublime-settings')
-        if GLOBAL_ENABLE and bh_popup.HOVER_SUPPORT and settings.get('show_offscreen_bracket_popup', True):
+        if (
+            GLOBAL_ENABLE and bh_popup.HOVER_SUPPORT and
+            settings.get('show_offscreen_bracket_popup', True) and
+            not view.settings().get('bracket_highlighter.ignore', False)
+        ):
             # Find other bracket
             region = None
             index = None
@@ -1051,12 +1054,12 @@ class BhListenerCommand(sublime_plugin.EventListener):
             if settings.get('bracket_highlighter.regions'):
                 for region_key in view.settings().get("bracket_highlighter.regions", []):
                     view.erase_regions(region_key)
-                view.settings().set('bracket_highlighter.clone_locations', [])
+                view.settings().set('bracket_highlighter.clone_locations', {})
             # Clone views (settings are shared between normal and cloned)
             if settings.get('bracket_highlighter.clone_regions'):
                 for region_key in view.settings().get("bracket_highlighter.clone_regions", []):
                     view.erase_regions(region_key)
-                view.settings().set('bracket_highlighter.clone_locations', [])
+                view.settings().set('bracket_highlighter.clone_locations', {})
 
     def on_activated(self, view):
         """Highlight brackets when the view gains focus again."""
@@ -1170,7 +1173,7 @@ def plugin_loaded():
     """
     General plugin initialization.
 
-    Load up uniocode table, initialize settings and match object,
+    Initialize settings and match object,
     and start event loop.  Restart event loop if already loaded.
     """
 

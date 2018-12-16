@@ -5,7 +5,7 @@ import textwrap
 import webbrowser
 import re
 
-__version__ = "2.27.1"
+__version__ = "2.27.5"
 __pc_name__ = 'BracketHighlighter'
 
 CSS = '''
@@ -140,7 +140,7 @@ class BracketHighlighterOpenSiteCommand(sublime_plugin.ApplicationCommand):
     """Open site links."""
 
     def run(self, url):
-        """Open the url."""
+        """Open the URL."""
 
         webbrowser.open_new_tab(url)
 
