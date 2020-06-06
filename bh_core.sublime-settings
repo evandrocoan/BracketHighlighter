@@ -641,10 +641,24 @@
     // the official list, and do not need to be inserted before
     // one of the official definitions, this is a good place to
     // put yours rules and keep in sync with the defaults.
-    // If you want to disable all gutter icons, please set icon
-    // to none for all region with user_bracket_styles
     "user_scope_brackets": [],
     "user_brackets": [],
+
+    // If you want to disable all gutter icons, please set icon
+    // to none for all region with user_bracket_styles
+    "user_bracket_styles": {
+        "default":      { "icon": "none" },
+        "unmatched":    { "icon": "none" },
+        "curly":        { "icon": "none" },
+        "round":        { "icon": "none" },
+        "square":       { "icon": "none" },
+        "angle":        { "icon": "none" },
+        "tag":          { "icon": "none" },
+        "c_define":     { "icon": "none" },
+        "single_quote": { "icon": "none" },
+        "double_quote": { "icon": "none" },
+        "regex":        { "icon": "none" }
+    },
 
     // Scope? (Defined in theme files.)
     // Examples: (keyword|string|number)
